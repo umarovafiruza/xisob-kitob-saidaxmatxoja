@@ -1,0 +1,2663 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Oila Byudjeti va Xarajatlar | Mobile App</title>
+  <style>
+/* ==========================================================================
+   XARAJATLAR VA OILA BYUDJETI (FAMILY & MOBILE-FIRST EXPENSE TRACKER)
+   Ota-onalar va Ro'zg'or uchun Qulay, Aniq va Zamonaviy | Sof CSS
+   ========================================================================== */
+
+/* 1. O'zgaruvchilar va Palitra */
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  /* Fon va yuzalar */
+  --bg-app: #f4f6f8;
+  --bg-card: #ffffff;
+  --bg-input: #f8fafc;
+  --bg-active: #f1f5f9;
+  
+  /* Matn ranglari */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  /* Chegaralar */
+  --border-subtle: #e2e8f0;
+  --border-focus: #2563eb;
+  
+  /* Holat ranglari */
+  --income-green: #10b981;
+  --income-green-bg: #ecfdf5;
+  --expense-red: #ef4444;
+  --expense-red-bg: #fef2f2;
+  
+  --accent-blue: #2563eb;
+  --accent-blue-bg: #eff6ff;
+  --accent-amber: #f59e0b;
+  --accent-amber-bg: #fffbeb;
+  --accent-purple: #8b5cf6;
+  --accent-purple-bg: #f5f3ff;
+  --accent-rose: #f43f5e;
+  --accent-rose-bg: #fff1f2;
+  --accent-cyan: #06b6d4;
+  --accent-cyan-bg: #ecfeff;
+  
+  /* Soyalar */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-nav: 0 -4px 16px rgba(15, 23, 42, 0.06);
+  --shadow-float: 0 6px 20px rgba(15, 23, 42, 0.3);
+  
+  /* Radiuslar */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-full: 9999px;
+  
+  /* Navigatsiya balandligi */
+  --nav-height: 64px;
+}
+
+/* 2. Reset va Baza */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.45;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--nav-height) + 26px + env(safe-area-inset-bottom, 0px));
+}
+
+.mobile-app-wrapper {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* 3. Mobil Header */
+.mobile-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-app-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.brand-date-today {
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-icon-btn {
+  background: transparent;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.header-icon-btn:active {
+  background: var(--bg-active);
+}
+
+/* 4. Tab Sahifalar */
+.tabs-container {
+  flex: 1;
+  padding: 16px 16px 20px;
+}
+
+.tab-page {
+  display: none;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.tab-page.active {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 5. Asosiy Kartalar (Cards) */
+.app-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hamyon Balansi (Asosiy Katta Karta) */
+.wallet-hero-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-hero-card::after {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.wallet-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.wallet-balance-amount {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 8px 0 16px;
+  word-break: break-word;
+}
+
+/* Kirim va Chiqim yonma-yon ko'rsatkichi */
+.wallet-flow-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.flow-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flow-label {
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.flow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.flow-dot.green { background: #34d399; }
+.flow-dot.red { background: #f87171; }
+
+.flow-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.flow-value.income { color: #34d399; }
+.flow-value.expense { color: #fca5a5; }
+
+/* Byudjet va Limit kartasi */
+.budget-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title-sm {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.budget-stats-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.budget-limit-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.budget-status-pill {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.budget-status-pill.success {
+  background: var(--income-green-bg);
+  color: var(--income-green);
+}
+
+.budget-status-pill.danger {
+  background: var(--expense-red-bg);
+  color: var(--expense-red);
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--income-green);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.progress-bar.warning { background: var(--accent-amber); }
+.progress-bar.danger { background: var(--expense-red); }
+
+.budget-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.775rem;
+  color: var(--text-secondary);
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 6. Kategoriyalar bloki (Asosiy sahifa) */
+.section-headline {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.categories-mobile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.category-mini-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.category-mini-card:active {
+  transform: scale(0.98);
+  border-color: #cbd5e1;
+}
+
+.cat-top-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-icon-symbol {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.cat-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cat-val {
+  font-size: 0.975rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.cat-percentage {
+  font-size: 0.725rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Kategoriya ranglari */
+.cat-rozgor .cat-val { color: #047857; }
+.cat-kommunal .cat-val { color: #0284c7; }
+.cat-dori .cat-val { color: #e11d48; }
+.cat-toy .cat-val { color: #d97706; }
+.cat-transport .cat-val { color: #7c3aed; }
+.cat-talim .cat-val { color: #2563eb; }
+.cat-boshqa .cat-val { color: #475569; }
+
+/* 7. So'nggi amallar (Asosiy sahifada) */
+.recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-view-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-active);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 11px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* ==========================================================================
+   8. TAB 2: YANGI AMAL QO'SHISH (KIRIM YOKI CHIQIM)
+   ========================================================================== */
+
+/* Kirim / Chiqim o'tkazgich (Segmented Control) */
+.type-switcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: var(--radius-md);
+  gap: 4px;
+}
+
+.type-btn {
+  height: 44px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.type-btn.active.expense {
+  background: #ffffff;
+  color: var(--expense-red);
+  box-shadow: var(--shadow-sm);
+}
+
+.type-btn.active.income {
+  background: #ffffff;
+  color: var(--income-green);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Tezkor Shablonlar (1-bosishda kiritish) */
+.templates-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.templates-label {
+  font-size: 0.775rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.templates-scroll-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.templates-scroll-row::-webkit-scrollbar {
+  display: none;
+}
+
+.template-chip {
+  flex-shrink: 0;
+  height: 34px;
+  padding: 0 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.template-chip:active {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+/* Katta Summa Inputi */
+.input-huge-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-huge {
+  width: 100%;
+  height: 60px;
+  background: var(--bg-card);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0 72px 0 16px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-huge:focus {
+  border-color: var(--accent-blue);
+}
+
+.currency-badge {
+  position: absolute;
+  right: 16px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.input-regular {
+  width: 100%;
+  height: 48px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0 14px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.input-regular:focus {
+  border-color: var(--accent-blue);
+}
+
+.form-group-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label-mobile {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Kategoriya chips */
+.category-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 360px) {
+  .category-chips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.category-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 42px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-subtle);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.category-chip.active {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.btn-primary-mobile {
+  width: 100%;
+  height: 52px;
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-top: 6px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+  transition: background-color 0.2s, transform 0.1s active;
+}
+
+.btn-primary-mobile:active {
+  transform: scale(0.98);
+}
+
+.btn-primary-mobile.income-mode {
+  background: var(--income-green);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================================================
+   9. TAB 3: OYMA-OY HISOBOT (MONTHLY REPORTS & STATS)
+   ========================================================================== */
+.monthly-reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.month-summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.month-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.month-name-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.month-badge-saved {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.month-badge-saved.positive {
+  background: var(--income-green-bg);
+  color: var(--income-green);
+}
+
+.month-badge-saved.negative {
+  background: var(--expense-red-bg);
+  color: var(--expense-red);
+}
+
+.month-card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+}
+
+.month-stat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-box-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.stat-box-val {
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.stat-box-val.green { color: var(--income-green); }
+.stat-box-val.red { color: var(--expense-red); }
+.stat-box-val.blue { color: var(--text-primary); }
+
+.month-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2px;
+}
+
+.btn-share-telegram {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #0088cc;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.btn-share-telegram:active {
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   10. TAB 4: TARIX (HISTORY)
+   ========================================================================== */
+.history-filters-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-search-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-mobile {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.history-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px 0 40px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.history-search-input:focus {
+  border-color: var(--accent-blue);
+  background: #ffffff;
+}
+
+.history-selects-row {
+  display: flex;
+  gap: 8px;
+}
+
+.history-select {
+  flex: 1;
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  font-size: 0.825rem;
+  color: var(--text-primary);
+  outline: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.history-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 4px;
+}
+
+.items-counter-text {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.btn-export-text {
+  background: none;
+  border: none;
+  color: var(--accent-blue);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Xarajat va Kirim Qatorlari */
+.expense-items-mobile {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.expense-row-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.expense-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cat-badge-mobile {
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Badge ranglari */
+.badge-rozgor { background-color: #ecfdf5; color: #047857; }
+.badge-kommunal { background-color: #e0f2fe; color: #0369a1; }
+.badge-dori { background-color: #ffe4e6; color: #be123c; }
+.badge-toy { background-color: #fef3c7; color: #b45309; }
+.badge-transport { background-color: #f5f3ff; color: #6d28d9; }
+.badge-talim { background-color: #eff6ff; color: #1d4ed8; }
+.badge-boshqa { background-color: #f1f5f9; color: #475569; }
+.badge-kirim { background-color: #d1fae5; color: #065f46; font-weight: 800; }
+
+.expense-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.expense-name-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expense-date-text {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.expense-row-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.expense-sum-text {
+  font-size: 0.975rem;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.expense-sum-text.expense { color: var(--expense-red); }
+.expense-sum-text.income { color: var(--income-green); }
+
+.btn-delete-mobile {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn-delete-mobile:active {
+  background: var(--expense-red-bg);
+  color: var(--expense-red);
+}
+
+/* Bo'sh holat */
+.empty-history-box {
+  padding: 44px 20px;
+  text-align: center;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-subtle);
+}
+
+.empty-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.empty-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-desc {
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   11. BOTTOM NAVIGATION BAR (EKRAN PASTIDAGI MENYU)
+   ========================================================================== */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-nav);
+  display: flex;
+  justify-content: center;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.nav-inner-container {
+  width: 100%;
+  max-width: 520px;
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px;
+  position: relative;
+}
+
+.nav-tab-btn {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.nav-tab-btn svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.nav-tab-label {
+  font-size: 0.675rem;
+  font-weight: 700;
+}
+
+.nav-tab-btn.active {
+  color: #0f172a;
+}
+
+.nav-tab-btn.active svg {
+  transform: translateY(-2px);
+  stroke-width: 2.5px;
+}
+
+/* O'rtadagi Ko'tarilgan Katta '+' Tugmasi */
+.nav-tab-center {
+  flex: 0 0 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: -14px;
+}
+
+.btn-fab-add {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f172a 0%, #10b981 100%);
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: var(--shadow-float);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.btn-fab-add svg {
+  width: 26px;
+  height: 26px;
+}
+
+.btn-fab-add:active {
+  transform: scale(0.92);
+}
+
+.nav-tab-center .nav-tab-label {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 0.675rem;
+  font-weight: 700;
+}
+
+.nav-tab-center.active .nav-tab-label {
+  color: #0f172a;
+}
+
+/* 12. Toast Xabarnoma */
+.toast-notice {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 200;
+  transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.toast-notice.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* 13. Byudjet modal oynasi */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 150;
+}
+
+@media (min-width: 520px) {
+  .modal-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-sheet {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 24px 20px 32px;
+  animation: slideUp 0.22s ease-out;
+}
+
+@media (min-width: 520px) {
+  .modal-sheet {
+    border-radius: var(--radius-lg);
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-sheet-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-sheet-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+</style>
+</head>
+<body>
+
+  <!-- Mobil Ilova Asosiy Konteyneri -->
+  <div class="mobile-app-wrapper">
+
+    <!-- 1. Mobil Header -->
+    <header class="mobile-header">
+      <div class="header-brand">
+        <span class="brand-app-name">Oila Byudjeti</span>
+        <span id="header-today-date" class="brand-date-today">Bugun</span>
+      </div>
+      <div class="header-right">
+        <!-- Tezkor Excel yuklash tugmasi -->
+        <button id="btn-quick-export" class="header-icon-btn" title="Excel (CSV) eksport">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. Sahifalar (Tablar) -->
+    <main class="tabs-container">
+
+      <!-- ==========================================
+           TAB 1: ASOSIY SAHIFA (HAMYON VA XULOSA)
+           ========================================== -->
+      <section id="tab-home" class="tab-page active">
+        
+        <!-- Hamyon Balansi (Katta Karta) -->
+        <div class="wallet-hero-card">
+          <div class="wallet-title-row">
+            <span>Hamyondagi Qoldiq Pul</span>
+            <span id="hero-period-text">Joriy oy</span>
+          </div>
+          <div id="wallet-balance" class="wallet-balance-amount">0 so'm</div>
+
+          <!-- Kirim va Chiqim yonma-yon oqimi -->
+          <div class="wallet-flow-row">
+            <div class="flow-item">
+              <span class="flow-label">
+                <span class="flow-dot green"></span>
+                Jami Kirim:
+              </span>
+              <span id="total-income" class="flow-value income">+ 0 so'm</span>
+            </div>
+            <div class="flow-item">
+              <span class="flow-label">
+                <span class="flow-dot red"></span>
+                Jami Chiqim:
+              </span>
+              <span id="total-expense" class="flow-value expense">- 0 so'm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Byudjet va Limit kartasi -->
+        <div class="app-card budget-card">
+          <div class="card-header-row">
+            <span class="card-title-sm">Oylik limit / Byudjet</span>
+            <button id="btn-set-budget" class="btn-link">+ Byudjet belgilash</button>
+          </div>
+          <div class="budget-stats-row">
+            <span id="budget-amount" class="budget-limit-val">Belgilanmagan</span>
+            <span id="budget-remaining-pill" class="budget-status-pill success">вЂ”</span>
+          </div>
+          <div class="progress-track">
+            <div id="budget-progress-fill" class="progress-bar"></div>
+          </div>
+          <div class="budget-meta-row">
+            <span id="budget-progress-pct">0% sarflandi</span>
+            <span id="budget-remaining-text">Limit nazorati</span>
+          </div>
+        </div>
+
+        <!-- Ro'zg'or Toifalari bo'yicha xarajatlar taqsimoti -->
+        <div>
+          <div class="section-headline">
+            <span>Xarajatlar taqsimoti</span>
+          </div>
+          <div id="home-categories-grid" class="categories-mobile-grid" style="margin-top: 10px;">
+            <!-- JS orqali to'ldiriladi -->
+          </div>
+        </div>
+
+        <!-- So'nggi amallar -->
+        <div>
+          <div class="section-headline">
+            <span>So'nggi amallar</span>
+          </div>
+          <div id="recent-expenses-list" class="recent-list" style="margin-top: 10px;">
+            <!-- JS orqali to'ldiriladi -->
+          </div>
+          <button id="btn-go-history" class="btn-view-all">
+            Barcha yozuvlarni ko'rish
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+      </section>
+
+
+      <!-- ==========================================
+           TAB 2: OYMA-OY HISOBOT (MONTHLY REPORTS)
+           ========================================== -->
+      <section id="tab-reports" class="tab-page">
+        <div class="section-headline" style="margin-bottom: 4px;">
+          <span>Oyma-oy hisobot va tahlil</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;">
+          Har bir oyda qancha pul kirdi, qancha xarajat bo'ldi va qancha pul tejab qolinganini ko'ring.
+        </p>
+
+        <div id="monthly-reports-container" class="monthly-reports-list">
+          <!-- JS orqali har bir oy kartochkasi chiziladi -->
+        </div>
+      </section>
+
+
+      <!-- ==========================================
+           TAB 3: YANGI AMAL QO'SHISH (KIRIM / CHIQIM)
+           ========================================== -->
+      <section id="tab-add" class="tab-page">
+        
+        <div class="app-card" style="display: flex; flex-direction: column; gap: 16px;">
+          
+          <!-- Kirim yoki Chiqim tanlash o'tkazgichi -->
+          <div class="type-switcher">
+            <button type="button" id="type-btn-expense" class="type-btn active expense">
+              рџ”ґ Chiqim (Xarajat)
+            </button>
+            <button type="button" id="type-btn-income" class="type-btn income">
+              рџџў Kirim (Pul kiritish)
+            </button>
+          </div>
+
+          <!-- Ota-onalar uchun Tezkor Shablonlar (1-bosishda kiritish) -->
+          <div class="templates-block">
+            <span class="templates-label">Tezkor shablonlar (bosing):</span>
+            <div id="templates-container" class="templates-scroll-row">
+              <!-- JS orqali turiga qarab to'ldiriladi -->
+            </div>
+          </div>
+
+          <form id="transaction-form" style="display: flex; flex-direction: column; gap: 14px;">
+            
+            <!-- Summa -->
+            <div class="form-group-mobile">
+              <label for="entry-amount" class="form-label-mobile">Summasi</label>
+              <div class="input-huge-wrap">
+                <input 
+                  type="number" 
+                  id="entry-amount" 
+                  class="input-huge" 
+                  placeholder="0" 
+                  min="1" 
+                  step="any" 
+                  required 
+                  inputmode="numeric"
+                />
+                <span class="currency-badge">so'm</span>
+              </div>
+            </div>
+
+            <!-- Nomi / Izoh -->
+            <div class="form-group-mobile">
+              <label for="entry-name" class="form-label-mobile">Nomi / Nima uchun?</label>
+              <input 
+                type="text" 
+                id="entry-name" 
+                class="input-regular" 
+                placeholder="Masalan: Bozorlik, Go'sht, Svet..." 
+                required 
+                autocomplete="off"
+              />
+            </div>
+
+            <!-- Toifa tanlash (Chip tugmalar) -->
+            <div class="form-group-mobile" id="category-selector-group">
+              <label class="form-label-mobile">Toifasi</label>
+              <div class="category-chips-grid" id="category-chips">
+                <!-- JS orqali dinamik chiziladi -->
+              </div>
+              <input type="hidden" id="entry-category" value="Ro'zg'or" />
+            </div>
+
+            <!-- Sana -->
+            <div class="form-group-mobile">
+              <label for="entry-date" class="form-label-mobile">Sanasi</label>
+              <input 
+                type="date" 
+                id="entry-date" 
+                class="input-regular" 
+                required
+              />
+            </div>
+
+            <!-- Saqlash tugmasi -->
+            <button type="submit" id="btn-submit-entry" class="btn-primary-mobile">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span id="btn-submit-text">Xarajatni saqlash</span>
+            </button>
+
+          </form>
+        </div>
+
+      </section>
+
+
+      <!-- ==========================================
+           TAB 4: TARIX VA FILTRLAR (HISTORY)
+           ========================================== -->
+      <section id="tab-history" class="tab-page">
+        
+        <!-- Qidiruv va Filtrlar -->
+        <div class="history-filters-card">
+          <div class="history-search-row">
+            <svg class="search-icon-mobile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="search-input" 
+              class="history-search-input" 
+              placeholder="Nomi bo'yicha qidirish..." 
+            />
+          </div>
+
+          <div class="history-selects-row">
+            <select id="filter-month" class="history-select" title="Oylar">
+              <option value="all">Barcha oylar</option>
+            </select>
+
+            <select id="filter-type" class="history-select" title="Amal turi">
+              <option value="all">Kirim va Chiqim</option>
+              <option value="expense">Faqat Chiqimlar</option>
+              <option value="income">Faqat Kirimlar</option>
+            </select>
+          </div>
+
+          <div class="history-selects-row">
+            <select id="filter-category" class="history-select" title="Toifalar">
+              <option value="all">Barcha toifalar</option>
+            </select>
+          </div>
+
+          <div class="history-actions-row">
+            <span id="entries-count" class="items-counter-text">0 ta yozuv</span>
+            <button id="btn-export-csv" class="btn-export-text">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Excel (CSV)
+            </button>
+          </div>
+        </div>
+
+        <!-- Barcha yozuvlar ro'yxati -->
+        <ul id="entries-list" class="expense-items-mobile">
+          <!-- JS orqali chiziladi -->
+        </ul>
+
+      </section>
+
+    </main>
+
+
+    <!-- ==========================================
+         3. MOBILE BOTTOM NAVIGATION BAR (PASTKI MENYU)
+         ========================================== -->
+    <nav class="bottom-nav-bar">
+      <div class="nav-inner-container">
+        
+        <!-- Tab 1: Asosiy -->
+        <button class="nav-tab-btn active" data-tab="tab-home" title="Asosiy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span class="nav-tab-label">Asosiy</span>
+        </button>
+
+        <!-- Tab 2: Oyma-oy hisobot -->
+        <button class="nav-tab-btn" data-tab="tab-reports" title="Oyma-oy hisobot">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span class="nav-tab-label">Oyma-oy</span>
+        </button>
+
+        <!-- Tab 3: Markaziy Katta '+' Tugmasi (Qo'shish) -->
+        <div class="nav-tab-center" data-tab="tab-add">
+          <button class="btn-fab-add" id="btn-fab-trigger" title="Yangi amal qo'shish">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <span class="nav-tab-label">Qo'shish</span>
+        </div>
+
+        <!-- Tab 4: Tarix -->
+        <button class="nav-tab-btn" data-tab="tab-history" title="Tarix">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span class="nav-tab-label">Tarix</span>
+        </button>
+
+      </div>
+    </nav>
+
+
+    <!-- 4. Toast Xabarnoma -->
+    <div id="toast-notice" class="toast-notice">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toast-text">Muvaffaqiyatli saqlandi!</span>
+    </div>
+
+
+    <!-- 5. Byudjet modal oynasi -->
+    <div id="budget-modal" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="modal-sheet-header">
+          <h3 class="modal-sheet-title">Oylik byudjet belgilash</h3>
+          <button id="btn-close-modal" class="btn-close-modal" title="Yopish">&times;</button>
+        </div>
+        <p style="font-size: 0.825rem; color: var(--text-secondary); margin-bottom: 14px;">
+          Oylik xarajatlaringiz ushbu limitdan oshib ketmasligini kuzatib borasiz.
+        </p>
+        <div class="form-group-mobile">
+          <label for="budget-modal-input" class="form-label-mobile">Limit summasi (so'm)</label>
+          <input 
+            type="number" 
+            id="budget-modal-input" 
+            class="input-regular" 
+            placeholder="Masalan: 5000000" 
+            min="0"
+            step="any"
+          />
+        </div>
+        <div class="modal-sheet-actions">
+          <button id="btn-remove-budget" type="button" class="btn-link" style="color: var(--expense-red); margin-right: auto;">
+            Bekor qilish
+          </button>
+          <button id="btn-cancel-budget" type="button" class="btn-link" style="color: var(--text-secondary); padding: 8px 12px;">
+            Yopish
+          </button>
+          <button id="btn-save-budget" type="button" class="btn-primary-mobile" style="width: auto; height: 42px; padding: 0 20px; margin-top: 0;">
+            Saqlash
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+/**
+ * ==============================================================================
+ * OILA BYUDJETI VA XARAJATLAR (MOBILE APP EDITION)
+ * Ota-onalar va Ro'zg'or uchun Qulay, Aniq va Zamonaviy | Sof Vanilla JS
+ * ==============================================================================
+ */
+
+// ==============================================================================
+// 1. TOIFALAR VA SHABLONLAR SOZLAMASI
+// ==============================================================================
+
+// Chiqim (Xarajat) toifalari
+const EXPENSE_CATEGORIES = [
+  "Ro'zg'or",
+  "Kommunal",
+  "Dori-darmon",
+  "To'y/Ehson",
+  "Transport",
+  "Ta'lim",
+  "Boshqa"
+];
+
+// Kirim (Daromad) toifalari
+const INCOME_CATEGORIES = [
+  "Oylik maosh",
+  "Pensiya",
+  "Farzandlar yordami",
+  "Savdo/Qo'shimcha",
+  "Boshqa kirim"
+];
+
+// Toifalar uchun ikonka va rang sinflari
+const CATEGORY_META = {
+  // Chiqimlar
+  "Ro'zg'or": { icon: "рџЌћ", badge: "badge-rozgor", card: "cat-rozgor" },
+  "Kommunal": { icon: "рџ’Ў", badge: "badge-kommunal", card: "cat-kommunal" },
+  "Dori-darmon": { icon: "рџ’Љ", badge: "badge-dori", card: "cat-dori" },
+  "To'y/Ehson": { icon: "рџЋЃ", badge: "badge-toy", card: "cat-toy" },
+  "Transport": { icon: "рџљ—", badge: "badge-transport", card: "cat-transport" },
+  "Ta'lim": { icon: "рџ“љ", badge: "badge-talim", card: "cat-talim" },
+  "Boshqa": { icon: "рџ“¦", badge: "badge-boshqa", card: "cat-boshqa" },
+  // Kirimlar
+  "Oylik maosh": { icon: "рџ’°", badge: "badge-kirim", card: "cat-rozgor" },
+  "Pensiya": { icon: "рџ‘ґ", badge: "badge-kirim", card: "cat-rozgor" },
+  "Farzandlar yordami": { icon: "вќ¤пёЏ", badge: "badge-kirim", card: "cat-rozgor" },
+  "Savdo/Qo'shimcha": { icon: "рџ’ј", badge: "badge-kirim", card: "cat-rozgor" },
+  "Boshqa kirim": { icon: "рџ’µ", badge: "badge-kirim", card: "cat-rozgor" }
+};
+
+// Ota-onalar uchun tezkor shablonlar (1-klikda to'ldirish)
+const QUICK_TEMPLATES = {
+  expense: [
+    { label: "рџЌћ Bozorlik", name: "Bozorlik (oziq-ovqat)", category: "Ro'zg'or" },
+    { label: "рџҐ© Go'sht", name: "Go'sht va yog'", category: "Ro'zg'or" },
+    { label: "рџ’Љ Apteka / Dori", name: "Apteka (dorixona)", category: "Dori-darmon" },
+    { label: "рџ’Ў Svet / Gaz", name: "Kommunal to'lovlar", category: "Kommunal" },
+    { label: "рџЋЃ To'y / Ehson", name: "To'y-ma'raka xarajati", category: "To'y/Ehson" },
+    { label: "рџљ— Yo'lkira", name: "Yo'lkira va transport", category: "Transport" }
+  ],
+  income: [
+    { label: "рџ’° Oylik maosh", name: "Oylik ish haqi", category: "Oylik maosh" },
+    { label: "рџ‘ґ Pensiya", name: "Oylik pensiya puli", category: "Pensiya" },
+    { label: "вќ¤пёЏ Bolalar yordami", name: "Farzandlar yuborgan pul", category: "Farzandlar yordami" },
+    { label: "рџ’ј Qo'shimcha daromad", name: "Qo'shimcha daromad", category: "Savdo/Qo'shimcha" }
+  ]
+};
+
+// ==============================================================================
+// 2. DASTUR HOLATI (STATE)
+// ==============================================================================
+
+const STORAGE_KEY = "family_budget_transactions_v2";
+const STORAGE_BUDGET_KEY = "my_budget_limit";
+
+// Eski ma'lumotlarni ham tekshirib, yangi formatga o'tkazish
+let transactions = [];
+try {
+  const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("my_expenses_data");
+  if (stored) {
+    transactions = JSON.parse(stored).map(item => ({
+      id: item.id || Date.now().toString(),
+      type: item.type || "expense", // sukut bo'yicha chiqim
+      name: item.name || "Xarajat",
+      amount: Number(item.amount) || 0,
+      category: item.category || "Ro'zg'or",
+      date: item.date || getTodayDateString()
+    }));
+  }
+} catch (e) {
+  transactions = [];
+}
+
+let budgetLimit = parseFloat(localStorage.getItem(STORAGE_BUDGET_KEY)) || 0;
+
+// Joriy holatlar
+let currentActiveTab = "tab-home";
+let currentEntryType = "expense"; // "expense" yoki "income"
+let selectedMonthFilter = "all";
+let selectedTypeFilter = "all";
+let selectedCategoryFilter = "all";
+let searchQuery = "";
+
+// ==============================================================================
+// 3. DOM ELEMENTLARI
+// ==============================================================================
+
+// Header
+const headerTodayDateEl = document.getElementById("header-today-date");
+const btnQuickExport = document.getElementById("btn-quick-export");
+
+// Asosiy (Home) sahifa
+const walletBalanceEl = document.getElementById("wallet-balance");
+const totalIncomeEl = document.getElementById("total-income");
+const totalExpenseEl = document.getElementById("total-expense");
+const heroPeriodTextEl = document.getElementById("hero-period-text");
+
+const budgetAmountEl = document.getElementById("budget-amount");
+const budgetRemainingPillEl = document.getElementById("budget-remaining-pill");
+const budgetRemainingTextEl = document.getElementById("budget-remaining-text");
+const budgetProgressFillEl = document.getElementById("budget-progress-fill");
+const budgetProgressPctEl = document.getElementById("budget-progress-pct");
+const btnSetBudget = document.getElementById("btn-set-budget");
+
+const homeCategoriesGridEl = document.getElementById("home-categories-grid");
+const recentExpensesListEl = document.getElementById("recent-expenses-list");
+const btnGoHistory = document.getElementById("btn-go-history");
+
+// Oyma-oy hisobot sahifasi (Tab 2)
+const monthlyReportsContainerEl = document.getElementById("monthly-reports-container");
+
+// Yangi amal qo'shish formasi (Tab 3)
+const typeBtnExpense = document.getElementById("type-btn-expense");
+const typeBtnIncome = document.getElementById("type-btn-income");
+const templatesContainerEl = document.getElementById("templates-container");
+const transactionForm = document.getElementById("transaction-form");
+const entryAmountInput = document.getElementById("entry-amount");
+const entryNameInput = document.getElementById("entry-name");
+const entryCategoryInput = document.getElementById("entry-category");
+const entryDateInput = document.getElementById("entry-date");
+const categoryChipsContainer = document.getElementById("category-chips");
+const btnSubmitEntry = document.getElementById("btn-submit-entry");
+const btnSubmitText = document.getElementById("btn-submit-text");
+
+// Tarix sahifasi (Tab 4)
+const filterMonthSelect = document.getElementById("filter-month");
+const filterTypeSelect = document.getElementById("filter-type");
+const filterCategorySelect = document.getElementById("filter-category");
+const searchInput = document.getElementById("search-input");
+const entriesListEl = document.getElementById("entries-list");
+const entriesCountEl = document.getElementById("entries-count");
+const btnExportCsv = document.getElementById("btn-export-csv");
+
+// Pastki Navigatsiya
+const navTabBtns = document.querySelectorAll(".nav-tab-btn, .nav-tab-center");
+const tabPages = document.querySelectorAll(".tab-page");
+const btnFabTrigger = document.getElementById("btn-fab-trigger");
+
+// Toast va Modal
+const toastNotice = document.getElementById("toast-notice");
+const toastText = document.getElementById("toast-text");
+const budgetModal = document.getElementById("budget-modal");
+const budgetModalInput = document.getElementById("budget-modal-input");
+const btnCloseModal = document.getElementById("btn-close-modal");
+const btnSaveBudget = document.getElementById("btn-save-budget");
+const btnCancelBudget = document.getElementById("btn-cancel-budget");
+const btnRemoveBudget = document.getElementById("btn-remove-budget");
+
+// ==============================================================================
+// 4. YORDAMCHI VA FORMATLASH FUNKSIYALARI
+// ==============================================================================
+
+/**
+ * Raqamni har 3 xonadan keyin bo'sh joy bilan formatlash
+ * Masalan: 765000 -> "765 000 so'm"
+ */
+function formatMoney(num) {
+  if (isNaN(num) || num === null || num === undefined) return "0 so'm";
+  const rounded = Math.round(num);
+  return rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " so'm";
+}
+
+function getTodayDateString() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDatePretty(dateString) {
+  if (!dateString) return "";
+  const parts = dateString.split("-");
+  if (parts.length !== 3) return dateString;
+
+  const monthsUz = [
+    "Yan", "Fev", "Mar", "Apr", "May", "Iyun",
+    "Iyul", "Avg", "Sen", "Okt", "Noy", "Dek"
+  ];
+  const day = parseInt(parts[2], 10);
+  const monthIndex = parseInt(parts[1], 10) - 1;
+  const year = parts[0];
+  return `${day}-${monthsUz[monthIndex] || parts[1]}, ${year}`;
+}
+
+function formatMonthYear(yearMonthStr) {
+  if (!yearMonthStr || yearMonthStr === "all") return "Barcha davr";
+  const [year, month] = yearMonthStr.split("-");
+  const monthsUz = [
+    "Yanvar", "Fevral", "Mart", "Aprel", "May", "Iyun",
+    "Iyul", "Avgust", "Sentabr", "Oktabr", "Noyabr", "Dekabr"
+  ];
+  return `${monthsUz[parseInt(month, 10) - 1] || month} ${year}`;
+}
+
+let toastTimer;
+function showToast(msg) {
+  if (toastTimer) clearTimeout(toastTimer);
+  toastText.textContent = msg;
+  toastNotice.classList.add("show");
+  toastTimer = setTimeout(() => {
+    toastNotice.classList.remove("show");
+  }, 2400);
+}
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function saveToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+  // eski kalitga ham zaxira
+  localStorage.setItem("my_expenses_data", JSON.stringify(transactions));
+}
+
+function saveBudgetToStorage() {
+  localStorage.setItem(STORAGE_BUDGET_KEY, budgetLimit.toString());
+}
+
+// ==============================================================================
+// 5. TABLARNI BOSHQARISH
+// ==============================================================================
+
+function switchTab(targetTabId) {
+  currentActiveTab = targetTabId;
+
+  tabPages.forEach(page => {
+    if (page.id === targetTabId) {
+      page.classList.add("active");
+    } else {
+      page.classList.remove("active");
+    }
+  });
+
+  navTabBtns.forEach(btn => {
+    const tab = btn.getAttribute("data-tab");
+    if (tab === targetTabId) {
+      btn.classList.add("active");
+    } else {
+      btn.classList.remove("active");
+    }
+  });
+
+  if (targetTabId === "tab-add") {
+    setTimeout(() => {
+      entryAmountInput.focus();
+    }, 150);
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ==============================================================================
+// 6. TEZKOR SHABLONLAR VA TOIFALARNI YANGILASH (TAB 3)
+// ==============================================================================
+
+function setEntryType(type) {
+  currentEntryType = type;
+
+  if (type === "expense") {
+    typeBtnExpense.className = "type-btn active expense";
+    typeBtnIncome.className = "type-btn income";
+    btnSubmitEntry.className = "btn-primary-mobile";
+    btnSubmitText.textContent = "Xarajatni saqlash";
+    entryCategoryInput.value = "Ro'zg'or";
+  } else {
+    typeBtnIncome.className = "type-btn active income";
+    typeBtnExpense.className = "type-btn expense";
+    btnSubmitEntry.className = "btn-primary-mobile income-mode";
+    btnSubmitText.textContent = "Kirimni saqlash";
+    entryCategoryInput.value = "Oylik maosh";
+  }
+
+  renderTemplates();
+  renderCategoryChips();
+}
+
+/**
+ * Tezkor shablonlarni chizish
+ */
+function renderTemplates() {
+  const templates = QUICK_TEMPLATES[currentEntryType] || [];
+  templatesContainerEl.innerHTML = "";
+
+  templates.forEach(t => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "template-chip";
+    chip.textContent = t.label;
+
+    chip.addEventListener("click", () => {
+      entryNameInput.value = t.name;
+      entryCategoryInput.value = t.category;
+
+      // Toifa chiplarini ham yangilash
+      const allChips = categoryChipsContainer.querySelectorAll(".category-chip");
+      allChips.forEach(c => {
+        if (c.getAttribute("data-cat") === t.category) {
+          c.classList.add("active");
+        } else {
+          c.classList.remove("active");
+        }
+      });
+
+      entryAmountInput.focus();
+    });
+
+    templatesContainerEl.appendChild(chip);
+  });
+}
+
+/**
+ * Toifa chip tugmalarini chizish
+ */
+function renderCategoryChips() {
+  const list = currentEntryType === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
+  categoryChipsContainer.innerHTML = "";
+
+  list.forEach((cat, index) => {
+    const meta = CATEGORY_META[cat] || { icon: "рџ“Њ" };
+    const div = document.createElement("div");
+    div.className = `category-chip ${index === 0 ? "active" : ""}`;
+    div.setAttribute("data-cat", cat);
+    div.innerHTML = `<span>${meta.icon}</span> <span>${cat}</span>`;
+
+    div.addEventListener("click", () => {
+      categoryChipsContainer.querySelectorAll(".category-chip").forEach(c => c.classList.remove("active"));
+      div.classList.add("active");
+      entryCategoryInput.value = cat;
+    });
+
+    categoryChipsContainer.appendChild(div);
+  });
+}
+
+// ==============================================================================
+// 7. ASOSIY HISOBLASH VA CHIZISH (RENDER)
+// ==============================================================================
+
+/**
+ * Tarix sahifasi uchun filtrlangan ro'yxatni olish
+ */
+function getFilteredTransactions() {
+  return transactions.filter(item => {
+    // Oylik filtr
+    if (selectedMonthFilter !== "all") {
+      const itemMonth = (item.date || "").slice(0, 7);
+      if (itemMonth !== selectedMonthFilter) return false;
+    }
+
+    // Turi bo'yicha filtr
+    if (selectedTypeFilter !== "all") {
+      if (item.type !== selectedTypeFilter) return false;
+    }
+
+    // Toifa bo'yicha filtr
+    if (selectedCategoryFilter !== "all") {
+      if (item.category !== selectedCategoryFilter) return false;
+    }
+
+    // Qidiruv
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase().trim();
+      const matchName = (item.name || "").toLowerCase().includes(q);
+      const matchCat = (item.category || "").toLowerCase().includes(q);
+      if (!matchName && !matchCat) return false;
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Oylar ro'yxatini shakllantirish
+ */
+function updateMonthFilterOptions() {
+  const monthSet = new Set();
+  transactions.forEach(item => {
+    if (item.date && item.date.length >= 7) {
+      monthSet.add(item.date.slice(0, 7));
+    }
+  });
+
+  const currentYearMonth = getTodayDateString().slice(0, 7);
+  monthSet.add(currentYearMonth);
+
+  const sortedMonths = Array.from(monthSet).sort().reverse();
+  const prevVal = filterMonthSelect.value;
+  filterMonthSelect.innerHTML = `<option value="all">Barcha oylar</option>`;
+
+  sortedMonths.forEach(ym => {
+    const opt = document.createElement("option");
+    opt.value = ym;
+    opt.textContent = formatMonthYear(ym);
+    filterMonthSelect.appendChild(opt);
+  });
+
+  if (sortedMonths.includes(prevVal) || prevVal === "all") {
+    filterMonthSelect.value = prevVal;
+    selectedMonthFilter = prevVal;
+  } else {
+    filterMonthSelect.value = "all";
+    selectedMonthFilter = "all";
+  }
+}
+
+/**
+ * Toifalar filtri selectini to'ldirish
+ */
+function updateCategoryFilterOptions() {
+  const allCategories = [...EXPENSE_CATEGORIES, ...INCOME_CATEGORIES];
+  const uniqueCats = Array.from(new Set(allCategories));
+  const prev = filterCategorySelect.value;
+
+  filterCategorySelect.innerHTML = `<option value="all">Barcha toifalar</option>`;
+  uniqueCats.forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    filterCategorySelect.appendChild(opt);
+  });
+
+  filterCategorySelect.value = prev || "all";
+}
+
+/**
+ * Asosiy sahifa (Dashboard) ko'rsatkichlarini chizish
+ */
+function renderDashboard() {
+  // Joriy oy yoki tanlangan oy bo'yicha hisoblash
+  const currentMonthStr = getTodayDateString().slice(0, 7);
+  
+  // Asosiy balans butun jami hisob bo'yicha:
+  let totalInc = 0;
+  let totalExp = 0;
+
+  // Joriy oydagi xarajatlar:
+  let curMonthExp = 0;
+
+  transactions.forEach(t => {
+    const amt = Number(t.amount) || 0;
+    if (t.type === "income") {
+      totalInc += amt;
+    } else {
+      totalExp += amt;
+      if (t.date && t.date.slice(0, 7) === currentMonthStr) {
+        curMonthExp += amt;
+      }
+    }
+  });
+
+  const balance = totalInc - totalExp;
+
+  // Hamyon balansi
+  if (balance >= 0) {
+    walletBalanceEl.textContent = formatMoney(balance);
+    walletBalanceEl.style.color = "#ffffff";
+  } else {
+    walletBalanceEl.textContent = "-" + formatMoney(Math.abs(balance));
+    walletBalanceEl.style.color = "#fca5a5";
+  }
+
+  totalIncomeEl.textContent = `+ ${formatMoney(totalInc)}`;
+  totalExpenseEl.textContent = `- ${formatMoney(totalExp)}`;
+
+  // Byudjet holati (Joriy oy uchun)
+  if (budgetLimit <= 0) {
+    budgetAmountEl.textContent = "Belgilanmagan";
+    budgetRemainingPillEl.textContent = "вЂ”";
+    budgetRemainingPillEl.className = "budget-status-pill";
+    budgetProgressFillEl.style.width = "0%";
+    budgetProgressPctEl.textContent = "0% sarflandi";
+    budgetRemainingTextEl.textContent = "Oylik limit belgilanmagan";
+    btnSetBudget.textContent = "+ Byudjet belgilash";
+  } else {
+    btnSetBudget.textContent = "O'zgartirish";
+    budgetAmountEl.textContent = formatMoney(budgetLimit);
+
+    const remaining = budgetLimit - curMonthExp;
+    const pct = Math.min(Math.round((curMonthExp / budgetLimit) * 100), 100);
+
+    budgetProgressFillEl.style.width = `${pct}%`;
+    budgetProgressPctEl.textContent = `${pct}% sarflandi (oylik)`;
+
+    if (remaining >= 0) {
+      budgetRemainingPillEl.textContent = `Qoldiq: ${formatMoney(remaining)}`;
+      budgetRemainingPillEl.className = "budget-status-pill success";
+      budgetRemainingTextEl.textContent = "Me'yorida ketmoqda";
+      budgetProgressFillEl.className = pct >= 85 ? "progress-bar warning" : "progress-bar";
+    } else {
+      budgetRemainingPillEl.textContent = `Oshdi: -${formatMoney(Math.abs(remaining))}`;
+      budgetRemainingPillEl.className = "budget-status-pill danger";
+      budgetRemainingTextEl.textContent = "Limitdan oshib ketdi!";
+      budgetProgressFillEl.className = "progress-bar danger";
+    }
+  }
+
+  // Toifalar bo'yicha xarajatlar taqsimoti (Faqat chiqimlar)
+  renderCategoryBreakdown(totalExp);
+
+  // So'nggi amallar (oxirgi 3 ta)
+  renderRecentTransactions();
+}
+
+/**
+ * Toifalar taqsimotini chizish
+ */
+function renderCategoryBreakdown(totalExp) {
+  const catSums = {};
+  EXPENSE_CATEGORIES.forEach(c => { catSums[c] = 0; });
+
+  transactions.forEach(t => {
+    if (t.type !== "income") {
+      const c = t.category || "Boshqa";
+      if (catSums[c] !== undefined) {
+        catSums[c] += Number(t.amount) || 0;
+      } else {
+        catSums["Boshqa"] = (catSums["Boshqa"] || 0) + (Number(t.amount) || 0);
+      }
+    }
+  });
+
+  homeCategoriesGridEl.innerHTML = "";
+
+  EXPENSE_CATEGORIES.forEach(cat => {
+    const sum = catSums[cat];
+    const pct = totalExp > 0 ? Math.round((sum / totalExp) * 100) : 0;
+    const meta = CATEGORY_META[cat] || { icon: "рџ“Њ", card: "cat-boshqa" };
+
+    const card = document.createElement("div");
+    card.className = `category-mini-card ${meta.card}`;
+    card.innerHTML = `
+      <div class="cat-top-row">
+        <span class="cat-icon-symbol">${meta.icon}</span>
+        <span class="cat-label">${cat}</span>
+      </div>
+      <div class="cat-val">${formatMoney(sum)}</div>
+      <div class="cat-percentage">${pct}% xarajat ulushi</div>
+    `;
+
+    card.addEventListener("click", () => {
+      selectedCategoryFilter = cat;
+      filterCategorySelect.value = cat;
+      selectedTypeFilter = "expense";
+      filterTypeSelect.value = "expense";
+      switchTab("tab-history");
+      renderApp();
+    });
+
+    homeCategoriesGridEl.appendChild(card);
+  });
+}
+
+/**
+ * So'nggi amallar ro'yxati (Asosiy sahifa)
+ */
+function renderRecentTransactions() {
+  recentExpensesListEl.innerHTML = "";
+  const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const top3 = sorted.slice(0, 3);
+
+  if (top3.length === 0) {
+    recentExpensesListEl.innerHTML = `
+      <div style="font-size: 0.825rem; color: var(--text-muted); text-align: center; padding: 12px 0;">
+        Hozircha hech qanday amal kiritilmagan.
+      </div>
+    `;
+    return;
+  }
+
+  top3.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "expense-row-card";
+    const meta = CATEGORY_META[item.category] || { badge: "badge-boshqa" };
+    const isIncome = item.type === "income";
+
+    row.innerHTML = `
+      <div class="expense-row-left">
+        <span class="cat-badge-mobile ${isIncome ? 'badge-kirim' : meta.badge}">
+          ${isIncome ? 'KIRIM' : escapeHtml(item.category)}
+        </span>
+        <div class="expense-meta">
+          <span class="expense-name-text">${escapeHtml(item.name)}</span>
+          <span class="expense-date-text">${formatDatePretty(item.date)}</span>
+        </div>
+      </div>
+      <div class="expense-row-right">
+        <span class="expense-sum-text ${isIncome ? 'income' : 'expense'}">
+          ${isIncome ? '+' : '-'} ${formatMoney(item.amount)}
+        </span>
+      </div>
+    `;
+    recentExpensesListEl.appendChild(row);
+  });
+}
+
+/**
+ * TAB 2: OYMA-OY HISOBOTLARNI CHIZISH
+ */
+function renderMonthlyReports() {
+  monthlyReportsContainerEl.innerHTML = "";
+
+  // Oylar bo'yicha guruhlash
+  const monthsData = {};
+  transactions.forEach(t => {
+    const ym = (t.date || "").slice(0, 7);
+    if (!ym) return;
+
+    if (!monthsData[ym]) {
+      monthsData[ym] = {
+        income: 0,
+        expense: 0,
+        categories: {}
+      };
+    }
+
+    const amt = Number(t.amount) || 0;
+    if (t.type === "income") {
+      monthsData[ym].income += amt;
+    } else {
+      monthsData[ym].expense += amt;
+      const cat = t.category || "Boshqa";
+      monthsData[ym].categories[cat] = (monthsData[ym].categories[cat] || 0) + amt;
+    }
+  });
+
+  const sortedMonths = Object.keys(monthsData).sort().reverse();
+
+  if (sortedMonths.length === 0) {
+    monthlyReportsContainerEl.innerHTML = `
+      <div class="empty-history-box">
+        <div class="empty-title">Oylik hisobotlar mavjud emas</div>
+        <div class="empty-desc">Xarajat yoki kirim kiritilgach, bu yerda oylik hisobotlar avtomatik paydo bo'ladi.</div>
+      </div>
+    `;
+    return;
+  }
+
+  sortedMonths.forEach(ym => {
+    const data = monthsData[ym];
+    const saved = data.income - data.expense;
+    const isPositive = saved >= 0;
+
+    // Eng katta xarajat toifasini topish
+    let topCatName = "Mavjud emas";
+    let topCatSum = 0;
+    Object.keys(data.categories).forEach(c => {
+      if (data.categories[c] > topCatSum) {
+        topCatSum = data.categories[c];
+        topCatName = c;
+      }
+    });
+
+    const card = document.createElement("div");
+    card.className = "month-summary-card";
+
+    // Telegram uchun xabar matnini tayyorlash
+    const telegramMessage = encodeURIComponent(
+      `рџ“Љ *Oila Byudjeti вЂ” ${formatMonthYear(ym)} Hisoboti:*\n\n` +
+      `рџџў Jami Kirim: +${formatMoney(data.income)}\n` +
+      `рџ”ґ Jami Chiqim: -${formatMoney(data.expense)}\n` +
+      `рџ’° ${isPositive ? 'Tejalgan mablag\':' : 'Qoldiq:'} ${isPositive ? '+' : '-'}${formatMoney(Math.abs(saved))}\n` +
+      `рџ›’ Eng ko'p xarajat: ${topCatName} (${formatMoney(topCatSum)})\n\n` +
+      `вњ… _Hisob-kitoblar aniq va joyida._`
+    );
+
+    card.innerHTML = `
+      <div class="month-card-header">
+        <span class="month-name-title">${formatMonthYear(ym)}</span>
+        <span class="month-badge-saved ${isPositive ? 'positive' : 'negative'}">
+          ${isPositive ? 'Tejaldi: +' : 'Ortiqcha: -'}${formatMoney(Math.abs(saved))}
+        </span>
+      </div>
+
+      <div class="month-card-stats">
+        <div class="month-stat-box">
+          <span class="stat-box-label">Kirim:</span>
+          <span class="stat-box-val green">+${formatMoney(data.income)}</span>
+        </div>
+        <div class="month-stat-box">
+          <span class="stat-box-label">Chiqim:</span>
+          <span class="stat-box-val red">-${formatMoney(data.expense)}</span>
+        </div>
+        <div class="month-stat-box">
+          <span class="stat-box-label">Qoldiq:</span>
+          <span class="stat-box-val blue">${isPositive ? '+' : '-'}${formatMoney(Math.abs(saved))}</span>
+        </div>
+      </div>
+
+      <div class="month-card-footer">
+        <span style="font-size: 0.775rem; color: var(--text-secondary);">
+          Asosiy xarajat: <b>${topCatName}</b>
+        </span>
+        <a href="https://t.me/share/url?url=&text=${telegramMessage}" target="_blank" class="btn-share-telegram">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+          </svg>
+          Telegramda ulashish
+        </a>
+      </div>
+    `;
+
+    monthlyReportsContainerEl.appendChild(card);
+  });
+}
+
+/**
+ * TAB 4: TARIX RO'YXATINI CHIZISH
+ */
+function renderHistoryList() {
+  const filtered = getFilteredTransactions();
+  entriesListEl.innerHTML = "";
+  entriesCountEl.textContent = `${filtered.length} ta yozuv`;
+
+  if (filtered.length === 0) {
+    entriesListEl.innerHTML = `
+      <li class="empty-history-box">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        <div class="empty-title">Hech qanday ma'lumot topilmadi</div>
+        <div class="empty-desc">Tanlangan parametrlar bo'yicha yozuv mavjud emas.</div>
+      </li>
+    `;
+    return;
+  }
+
+  const sorted = [...filtered].sort((a, b) => new Date(b.date) - new Date(a.date) || b.id.localeCompare(a.id));
+
+  sorted.forEach(item => {
+    const li = document.createElement("li");
+    li.className = "expense-row-card";
+    const meta = CATEGORY_META[item.category] || { badge: "badge-boshqa" };
+    const isIncome = item.type === "income";
+
+    li.innerHTML = `
+      <div class="expense-row-left">
+        <span class="cat-badge-mobile ${isIncome ? 'badge-kirim' : meta.badge}">
+          ${isIncome ? 'KIRIM' : escapeHtml(item.category)}
+        </span>
+        <div class="expense-meta">
+          <span class="expense-name-text">${escapeHtml(item.name)}</span>
+          <span class="expense-date-text">${formatDatePretty(item.date)}</span>
+        </div>
+      </div>
+      <div class="expense-row-right">
+        <span class="expense-sum-text ${isIncome ? 'income' : 'expense'}">
+          ${isIncome ? '+' : '-'} ${formatMoney(item.amount)}
+        </span>
+        <button type="button" class="btn-delete-mobile" data-id="${item.id}" title="O'chirish">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </div>
+    `;
+
+    li.querySelector(".btn-delete-mobile").addEventListener("click", () => {
+      deleteTransaction(item.id);
+    });
+
+    entriesListEl.appendChild(li);
+  });
+}
+
+/**
+ * Butun dasturni qayta render qilish
+ */
+function renderApp() {
+  renderDashboard();
+  renderMonthlyReports();
+  renderHistoryList();
+}
+
+// ==============================================================================
+// 8. AMALLAR (QO'SHISH, O'CHIRISH, EKSPORT)
+// ==============================================================================
+
+function addTransaction(e) {
+  e.preventDefault();
+
+  const amount = parseFloat(entryAmountInput.value);
+  const name = entryNameInput.value.trim();
+  const category = entryCategoryInput.value || (currentEntryType === "expense" ? "Ro'zg'or" : "Oylik maosh");
+  const date = entryDateInput.value || getTodayDateString();
+
+  if (isNaN(amount) || amount <= 0) {
+    alert("Iltimos, to'g'ri summani kiriting!");
+    entryAmountInput.focus();
+    return;
+  }
+
+  if (!name) {
+    alert("Iltimos, nomini kiriting!");
+    entryNameInput.focus();
+    return;
+  }
+
+  const newEntry = {
+    id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+    type: currentEntryType,
+    name: name,
+    amount: amount,
+    category: category,
+    date: date
+  };
+
+  transactions.unshift(newEntry);
+  saveToStorage();
+  updateMonthFilterOptions();
+  renderApp();
+
+  // Formani tozalash
+  entryAmountInput.value = "";
+  entryNameInput.value = "";
+
+  showToast(currentEntryType === "income" ? "Kirim muvaffaqiyatli saqlandi!" : "Xarajat saqlandi!");
+
+  // Tarix sahifasiga o'tkazish
+  setTimeout(() => {
+    switchTab("tab-history");
+  }, 350);
+}
+
+function deleteTransaction(id) {
+  const target = transactions.find(i => i.id === id);
+  const isIncome = target && target.type === "income";
+  const name = target ? target.name : "Ushbu yozuv";
+
+  if (confirm(`"${name}" (${isIncome ? 'Kirim' : 'Chiqim'})ni o'chirishni tasdiqlaysizmi?`)) {
+    transactions = transactions.filter(i => i.id !== id);
+    saveToStorage();
+    updateMonthFilterOptions();
+    renderApp();
+    showToast("Muvaffaqiyatli o'chirildi");
+  }
+}
+
+/**
+ * Excel (CSV) eksport
+ */
+function exportToCSV() {
+  const filtered = getFilteredTransactions();
+  if (filtered.length === 0) {
+    alert("Eksport qilish uchun yozuvlar topilmadi!");
+    return;
+  }
+
+  let csv = "\uFEFF"; // UTF-8 BOM
+  csv += "T/r;Turi;Nomi;Summasi (so'm);Toifasi;Sana\r\n";
+
+  filtered.forEach((item, index) => {
+    const typeLabel = item.type === "income" ? "Kirim" : "Chiqim";
+    const cleanName = `"${(item.name || "").replace(/"/g, '""')}"`;
+    const cleanCat = `"${(item.category || "").replace(/"/g, '""')}"`;
+    csv += `${index + 1};${typeLabel};${cleanName};${item.amount};${cleanCat};${item.date}\r\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `oila_byudjeti_${getTodayDateString()}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  showToast("Excel fayl yuklab olindi!");
+}
+
+// ==============================================================================
+// 9. BYUDJET MODAL BOSHQARUVI
+// ==============================================================================
+
+function openBudgetModal() {
+  budgetModalInput.value = budgetLimit > 0 ? budgetLimit : "";
+  budgetModal.classList.add("active");
+  budgetModalInput.focus();
+}
+
+function closeBudgetModal() {
+  budgetModal.classList.remove("active");
+}
+
+function saveBudgetModal() {
+  const val = parseFloat(budgetModalInput.value);
+  if (isNaN(val) || val < 0) {
+    alert("Iltimos, to'g'ri byudjet summasini kiriting!");
+    return;
+  }
+  budgetLimit = val;
+  saveBudgetToStorage();
+  closeBudgetModal();
+  renderApp();
+  showToast("Oylik byudjet saqlandi!");
+}
+
+function removeBudgetModal() {
+  if (confirm("Byudjet limitini bekor qilmoqchimisiz?")) {
+    budgetLimit = 0;
+    saveBudgetToStorage();
+    closeBudgetModal();
+    renderApp();
+    showToast("Byudjet bekor qilindi");
+  }
+}
+
+// ==============================================================================
+// 10. DASTURNI BOSHLASH (INITIALIZATION)
+// ==============================================================================
+
+function initApp() {
+  const today = getTodayDateString();
+  entryDateInput.value = today;
+  headerTodayDateEl.textContent = formatDatePretty(today);
+
+  // Agar yangi ochilgan bo'lsa, ota-onalarga mos chiroyli namunaviy ma'lumotlar qo'yish
+  if (!localStorage.getItem(STORAGE_KEY) && transactions.length === 0) {
+    transactions = [
+      {
+        id: "demo-inc-1",
+        type: "income",
+        name: "Oylik pensiya puli",
+        amount: 2200000,
+        category: "Pensiya",
+        date: today
+      },
+      {
+        id: "demo-inc-2",
+        type: "income",
+        name: "Farzandlar yuborgan pul",
+        amount: 3000000,
+        category: "Farzandlar yordami",
+        date: today
+      },
+      {
+        id: "demo-exp-1",
+        type: "expense",
+        name: "Bozorlik va non-choy",
+        amount: 450000,
+        category: "Ro'zg'or",
+        date: today
+      },
+      {
+        id: "demo-exp-2",
+        type: "expense",
+        name: "Apteka (davolanish dori-darmoni)",
+        amount: 180000,
+        category: "Dori-darmon",
+        date: today
+      },
+      {
+        id: "demo-exp-3",
+        type: "expense",
+        name: "Svet va gaz to'lovi",
+        amount: 220000,
+        category: "Kommunal",
+        date: today
+      }
+    ];
+    budgetLimit = 3500000;
+    saveToStorage();
+    saveBudgetToStorage();
+  }
+
+  // Toifalar va shablonlarni ilk marta chizish
+  setEntryType("expense");
+  updateMonthFilterOptions();
+  updateCategoryFilterOptions();
+
+  // Tab o'tishlari
+  navTabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.getAttribute("data-tab");
+      if (tab) switchTab(tab);
+    });
+  });
+
+  if (btnFabTrigger) {
+    btnFabTrigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      switchTab("tab-add");
+    });
+  }
+
+  if (btnGoHistory) {
+    btnGoHistory.addEventListener("click", () => {
+      switchTab("tab-history");
+    });
+  }
+
+  // Kirim / Chiqim o'tkazgich
+  typeBtnExpense.addEventListener("click", () => setEntryType("expense"));
+  typeBtnIncome.addEventListener("click", () => setEntryType("income"));
+
+  // Forma yuborilishi
+  transactionForm.addEventListener("submit", addTransaction);
+
+  // Filtrlar
+  filterMonthSelect.addEventListener("change", (e) => {
+    selectedMonthFilter = e.target.value;
+    renderApp();
+  });
+
+  filterTypeSelect.addEventListener("change", (e) => {
+    selectedTypeFilter = e.target.value;
+    renderApp();
+  });
+
+  filterCategorySelect.addEventListener("change", (e) => {
+    selectedCategoryFilter = e.target.value;
+    renderApp();
+  });
+
+  searchInput.addEventListener("input", (e) => {
+    searchQuery = e.target.value;
+    renderApp();
+  });
+
+  // CSV eksport
+  btnExportCsv.addEventListener("click", exportToCSV);
+  btnQuickExport.addEventListener("click", exportToCSV);
+
+  // Byudjet modal
+  btnSetBudget.addEventListener("click", openBudgetModal);
+  btnCloseModal.addEventListener("click", closeBudgetModal);
+  btnCancelBudget.addEventListener("click", closeBudgetModal);
+  btnSaveBudget.addEventListener("click", saveBudgetModal);
+  btnRemoveBudget.addEventListener("click", removeBudgetModal);
+
+  budgetModal.addEventListener("click", (e) => {
+    if (e.target === budgetModal) closeBudgetModal();
+  });
+
+  renderApp();
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
+
+</script>
+</body>
+</html>
